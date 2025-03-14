@@ -40,7 +40,7 @@ export default function App() {
           onProceed={async (amount) => {
             // Save the entered amount and navigate to Tabs
             await AsyncStorage.setItem('BudgetAmount', JSON.stringify(amount));
-            await AsyncStorage.setItem('BudgetAmount2',JSON.stringify(amount));
+            await AsyncStorage.setItem('BudgetAmount2', JSON.stringify(amount));
             console.log(typeof amount);
             setIsFirstTime(false); // Now proceed to Tabs
           }}
@@ -56,7 +56,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    backgroundColor: '#fff',
+    height: '100%',
+    backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
   },

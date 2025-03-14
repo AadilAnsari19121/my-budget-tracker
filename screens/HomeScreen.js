@@ -15,7 +15,7 @@ const HomeScreen = () => {
     const [weeklyAmountColor, setweeklyAmountColor] = useState('#4caf50');
     const [InputModal, setInputModalVisible] = useState(false);
     const [ItemsArray, setItemArray] = useState([]);
-    const [AllItemDataArray,setAllItemDataArray]=useState([]); //yeh woh data hoga jo weekly par reset nahi hoga quki yeh history dikhane ke liye he
+    const [AllItemDataArray, setAllItemDataArray] = useState([]); //yeh woh data hoga jo weekly par reset nahi hoga quki yeh history dikhane ke liye he
     const [WeekSpendAmount, setWeekSpendAmount] = useState(0);
     const ResetWeekDay = 1;
     const [Item_Reseted, setItem_Reseted] = useState(2);
@@ -29,13 +29,13 @@ const HomeScreen = () => {
     }, []);
 
     useFocusEffect(
-        useCallback(()=>{
-           
+        useCallback(() => {
+
             const date = new Date();
             const RemDay = WeekDayRem(date);
             setreminingDay(RemDay);
             CheckResetDate();
-        },[])
+        }, [])
     );
 
     useEffect(() => {
@@ -45,9 +45,9 @@ const HomeScreen = () => {
     useEffect(() => {
         if (ItemsArray.length > 0 || ItemsArray !== null) {
             setTimeout(() => {
-            saveData();
+                saveData();
             }, 200);
-            
+
         }
     }, [weeklyAmount, ItemsArray, Item_Reseted, WeekSpendAmount]);
 
@@ -58,30 +58,30 @@ const HomeScreen = () => {
             const All_Item_Data_Array = await AsyncStorage.getItem('All_Item_Data_Array');
             const Item_reset = await AsyncStorage.getItem('Item_Reset');
             const Final_Budget = await AsyncStorage.getItem('BudgetAmount2');
-            const Week_Spend_Amount= await AsyncStorage.getItem('WeekSpendAmount');
-            const EditValue= await AsyncStorage.getItem('EditAm');
+            const Week_Spend_Amount = await AsyncStorage.getItem('WeekSpendAmount');
+            const EditValue = await AsyncStorage.getItem('EditAm');
 
-           
-            if(EditValue!==null){
-                console.log("edit checking status: ",JSON.parse(EditValue));
-                if(JSON.parse(EditValue)){
-                    const editedFinalBudget=JSON.parse(Final_Budget)-JSON.parse(Week_Spend_Amount);
+
+            if (EditValue !== null) {
+                console.log("edit checking status: ", JSON.parse(EditValue));
+                if (JSON.parse(EditValue)) {
+                    const editedFinalBudget = JSON.parse(Final_Budget) - JSON.parse(Week_Spend_Amount);
                     setweeklyAmount(editedFinalBudget);
-                    console.log("editied amount: ",editedFinalBudget, " ",JSON.parse(Final_Budget)," ",JSON.parse(Week_Spend_Amount));
-                    setTimeout(async() => {
-                        await AsyncStorage.setItem('EditAm',JSON.stringify(false));
+                    console.log("editied amount: ", editedFinalBudget, " ", JSON.parse(Final_Budget), " ", JSON.parse(Week_Spend_Amount));
+                    setTimeout(async () => {
+                        await AsyncStorage.setItem('EditAm', JSON.stringify(false));
                     }, 100);
-                }else{
+                } else {
                     if (BudgetAmount !== null) { setweeklyAmount(JSON.parse(BudgetAmount)) }
                 }
-            }else{
+            } else {
                 if (BudgetAmount !== null) { setweeklyAmount(JSON.parse(BudgetAmount)) }
             }
             if (Final_Budget !== null) { setFinalBudget(JSON.parse(Final_Budget)); }
             if (Item_Array !== null) { setItemArray(JSON.parse(Item_Array)); }
-            if(All_Item_Data_Array!==null){setAllItemDataArray(JSON.parse(All_Item_Data_Array));}
+            if (All_Item_Data_Array !== null) { setAllItemDataArray(JSON.parse(All_Item_Data_Array)); }
             if (Item_reset !== null) { setItem_Reseted(JSON.parse(Item_reset)); }
-            if(Week_Spend_Amount!==null){ setWeekSpendAmount(JSON.parse(Week_Spend_Amount));}
+            if (Week_Spend_Amount !== null) { setWeekSpendAmount(JSON.parse(Week_Spend_Amount)); }
 
         } catch (error) { console.log("get item error ", error); }
     };
@@ -92,8 +92,8 @@ const HomeScreen = () => {
             await AsyncStorage.setItem('BudgetAmount', JSON.stringify(weeklyAmount));
             await AsyncStorage.setItem('Item_Array', JSON.stringify(ItemsArray));
             await AsyncStorage.setItem('All_Item_Data_Array', JSON.stringify(AllItemDataArray));
-            await AsyncStorage.setItem('Item_Reseted',JSON.stringify(Item_Reseted));
-            await AsyncStorage.setItem('WeekSpendAmount',JSON.stringify(WeekSpendAmount));
+            await AsyncStorage.setItem('Item_Reseted', JSON.stringify(Item_Reseted));
+            await AsyncStorage.setItem('WeekSpendAmount', JSON.stringify(WeekSpendAmount));
         } catch (error) {
             console.log("error for saving data ", error);
         }
@@ -103,37 +103,37 @@ const HomeScreen = () => {
         const today = new Date();
         const currentDay = today.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
         const todayDate = today.toDateString(); // Store as a string to compare
-    
+
         try {
             const lastResetDate = await AsyncStorage.getItem('LastResetDate');
-    
-            console.log("final budget",FinalBudget);
+
+            console.log("final budget", FinalBudget);
             if (currentDay === ResetWeekDay) {
                 if (lastResetDate === todayDate) {
                     console.log('Already reset today, skipping...');
                     getData();
                     return;
                 }
-    
+
                 CarryAmount();
                 // Reset the budget and clear the item array
                 setItemArray([]);
                 setweeklyAmount(FinalBudget);
                 setWeekSpendAmount(0);
-               
-    
+
+
                 await AsyncStorage.setItem('BudgetAmount', JSON.stringify(FinalBudget));
                 await AsyncStorage.setItem('Item_Array', JSON.stringify([]));
                 await AsyncStorage.setItem('Item_Reset', JSON.stringify(true));
-                await AsyncStorage.setItem('WeekSpendAmount',JSON.stringify(0));
+                await AsyncStorage.setItem('WeekSpendAmount', JSON.stringify(0));
                 await AsyncStorage.setItem('LastResetDate', todayDate); // Store today's date to prevent multiple resets
-    
+
                 console.log('Budget and items reset for the week.');
 
                 setTimeout(() => {
                     getData();
                 }, 500);
-                
+
             } else {
                 console.log('Not reset day, skipping...');
                 getData();
@@ -142,7 +142,7 @@ const HomeScreen = () => {
             console.log("Error in CheckResetDate:", error);
         }
     };
-    
+
     const buttonclick = async (data) => {
         setItemArray((array) => {
             const newId = array.length + 1;
@@ -159,7 +159,7 @@ const HomeScreen = () => {
         const am = data.Amount;
         setweeklyAmount(weeklyAmount - am);
         const amInFloat = parseFloat(am) + parseFloat(WeekSpendAmount);
-        console.log("amInFloat : ",amInFloat," = ",parseFloat(am)," + ",parseFloat(WeekSpendAmount));
+        console.log("amInFloat : ", amInFloat, " = ", parseFloat(am), " + ", parseFloat(WeekSpendAmount));
         setWeekSpendAmount(amInFloat);
     }
 
@@ -187,30 +187,30 @@ const HomeScreen = () => {
 
     const setColorOfWeekBalance = async (am, mnAm) => {
 
-        if(mnAm<=500){
+        if (mnAm <= 500) {
             let minPercentage = 40;
             const minAMout = (mnAm * minPercentage) / 100;
             if (am <= minAMout) { setweeklyAmountColor('red'); }
             else { setweeklyAmountColor('#4caf50'); }
-        } if(mnAm>500 && mnAm <=1000){
+        } if (mnAm > 500 && mnAm <= 1000) {
             let minPercentage = 20;
             const minAMout = (mnAm * minPercentage) / 100;
             if (am <= minAMout) { setweeklyAmountColor('red'); }
             else { setweeklyAmountColor('#4caf50'); }
-        }else{
+        } else {
             let minPercentage = 10;
             const minAMout = (mnAm * minPercentage) / 100;
             if (am <= minAMout) { setweeklyAmountColor('red'); }
             else { setweeklyAmountColor('#4caf50'); }
-        }  
+        }
     }
 
-    const CarryAmount=()=>{
-        console.log("saving week data is carry",weeklyAmount);
+    const CarryAmount = () => {
+        console.log("saving week data is carry", weeklyAmount);
     }
 
     return (
-        <View style={{ flex: 1, alignItems: 'center' }}>
+        <View style={{ flex: 1, alignItems: 'center', backgroundColor: 'white' }}>
 
             <View style={styles.header}>
                 <Text style={{ fontSize: 20, color: 'black', fontWeight: '500' }}>Available balance</Text>
