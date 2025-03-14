@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "name": "My_Budget",
+    "slug": "My_Budget",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/logo.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "jsEngine": "hermes",
+    "splash": {
+      "image": "./assets/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logo.png",
+        "backgroundColor": "#ffffff"
+      },
+      "minifyEnabled": true,
+      "proguard": true,
+      "optimize": true,
+      "package": "com.aadil2007.My_Budget"
+    },
+    "web": {
+      "favicon": "./assets/logo.png"
+    },
+    "assetBundlePatterns": [
+      "*/"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "4ccfce4c-3a93-404e-82bd-2fe0a933da70"
+      }
+    }
+  }
+}
